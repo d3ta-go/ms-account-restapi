@@ -8,21 +8,21 @@ environment:
 applications:
   servers:
     restapi:
-      name: "DDD Technical Architecture Patterns:: REST API"
+      name: "Modular DDD Technical Architecture Patterns:: Account REST API"
       version: "0.1.0"
-      description: "Domain-Driven Design Technical Architecture Patterns:: Golang Sample"
+      description: "Modular Domain-Driven Design Technical Architecture Patterns:: Golang Sample"
       options:
         showEngineHeader: true
         displayOpenAPI: true
         listener:
-          port: 2020
+          port: 20202
         middlewares:
           logger:
             enable: true
         openAPIDefinition: # OpenAPIDefinition
           info:
-            title: "DDD Technical Architecture Patterns: REST API"
-            description: "A Simple Implementation of `Domain-Driven Design Technical Architecture Patterns` in Golang"
+            title: "Modular DDD Technical Architecture Patterns: Account REST API"
+            description: "A Simple Implementation of `Modular Domain-Driven Design Technical Architecture Patterns` in Golang"
             termsOfService: https://github.com/d3ta-go
             contact:
               name: Muhammad Hari
@@ -120,20 +120,6 @@ dirLocations:
   log: "./logs"
   cache: "./caches"
 
-# Connectors
-connectors:
-  covid19:
-    covid19who:
-      code: who
-      name: Covid19 WHO Official Website
-      server: "https://covid19.who.int"
-      enable: true
-    covid19goid:
-      code: covid19goid
-      name: Covid19 Indonesia Official Website
-      server: "https://data.covid19.go.id"
-      enable: true
-
 # SMTP Servers
 SMTPServers:
   defaultSMTP:
@@ -172,34 +158,3 @@ caches:
       interval: 60
       occupyMode: false
       section: "cache"
-
-# Indexers
-indexers:
-  dataIndexer:
-    connectionName: "data-indexer"
-    engine: "elasticsearch"
-    driver: "elasticsearch"
-    version: "7"
-    configurations:
-      adapter: "elasticsearch"
-      addresses:
-        - "http://localhost:9200"
-        - "http://localhost:9201"
-      username: ""
-      password: ""
-      cloudID: ""
-      APIKey: ""
-  logIndexer:
-    connectionName: "log-indexer"
-    engine: "elasticsearch"
-    driver: "elasticsearch"
-    version: "8"
-    configurations:
-      adapter: "elasticseach"
-      addresses:
-        - "http://localhost:9201"
-        - "http://localhost:9200"
-      username: ""
-      password: ""
-      cloudID: ""
-      APIKey: ""
