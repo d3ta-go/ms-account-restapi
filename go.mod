@@ -1,4 +1,4 @@
-module github.com/d3ta-go/project-template
+module github.com/d3ta-go/ms-account-restapi
 
 go 1.15
 

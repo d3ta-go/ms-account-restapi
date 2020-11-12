@@ -1,2 +1,3 @@
-# project-template
-DDD Project Template in Go
+# ms-account-restapi
+
+MicroService Interface/Presentation App: Account RestAPI

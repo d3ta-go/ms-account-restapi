@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/d3ta-go/project-template/cmd/db"
-	"github.com/d3ta-go/project-template/cmd/server"
+	"github.com/d3ta-go/ms-account-restapi/cmd/db"
+	"github.com/d3ta-go/ms-account-restapi/cmd/server"
 )
 
 func init() {
