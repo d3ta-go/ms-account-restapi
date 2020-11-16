@@ -1,0 +1,36 @@
+---
+# Test Data
+test-data:
+  account:
+    auth:
+      interface-layer:
+        features:
+          activate-registration:
+            request:
+              activation-code: c20521a8-957b-40f4-bee8-a074745e1521
+            response:
+              json: '{"status":"OK","response":{"message":"Operation succeeded","result":{"email":"test.d3tago.9cb022e4-b83b-41f2-81da-c433130dc666@gmail.com","NickName":"Hari","defaultRole":"group:default"}},"serverInfo":{"serverTime":"2020-11-16T07:04:42.727875+07:00"}}'
+          login:
+            request:
+              captcha-id: just-captcha-id
+              captcha-value: just-captcha-value
+              password: P4s$W0rd!@!
+              username: test.d3tago.9cb022e4-b83b-41f2-81da-c433130dc666
+            response:
+              json: '{"status":"OK","response":{"message":"Operation succeeded","result":{"tokenType":"JWT","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTMsIlVVSUQiOiJjOWFlNzcxMC03NGM5LTQxNzktYTc2Zi0xN2U3MmNiZGRkZjUiLCJVc2VybmFtZSI6InRlc3QuZDN0YWdvLjI5NTVmMzFlLWMyZGQtNDljNy1hZTc3LTRhZGJlMmM2NDNlNiIsIk5pY2tOYW1lIjoiSGFyaSIsIkF1dGhvcml0eUlEIjoiZ3JvdXA6ZGVmYXVsdCIsImV4cCI6MTYwNjA4OTcxNSwiaXNzIjoiRDNUQS1HbyIsIm5iZiI6MTYwNTQ4MzkxNX0.DUUKZzWYvj4UYh_ouZGRrh9BD03M9sqya6Qu2fDRg1A","expiredAt":1606089715000}},"serverInfo":{"serverTime":"2020-11-16T07:01:55.00796+07:00"}}'
+          login-app:
+            request:
+              client-key: 3957c036-f62d-4691-8eea-4ec977f66f5a
+              secret-key: NmM4MWRlYjI1Y2JiNGU1NjVmNmM5NWI3M2ZjODY2OWVmM2NmNmQ2NGE4NjYyZmE2NGFlNzljMWIyYTg1MTZjOA==
+            response:
+              json: '{"status":"OK","response":{"message":"Operation succeeded","result":{"tokenType":"JWT","clientAppCode":"super-admin-app","clientAppName":"Super Admin Client Application","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiVVVJRCI6IjIyZmIyYjY4LTNmMjctNGQyNy04YTMwLTY3MWI2MGQzMGFmMCIsIlVzZXJuYW1lIjoiYWRtaW4uZDN0YWdvIiwiTmlja05hbWUiOiJIYXJpIiwiQXV0aG9yaXR5SUQiOiJncm91cDphZG1pbiIsImV4cCI6MTYwNjA5MDA4MywiaXNzIjoiRDNUQS1HbyIsIm5iZiI6MTYwNTQ4NDI4M30.A-ZUniYSeSRfXHGOdlsbDql0Lly0W0v_hrtSvQJI678","expiredAt":1606090083000}},"serverInfo":{"serverTime":"2020-11-16T07:08:03.815258+07:00"}}'
+          register-user:
+            request:
+              captcha-id: just-captcha-id
+              captcha-value: just-captcha-value
+              email: test.d3tago.%s@gmail.com
+              nick-name: Hari
+              password: P4s$W0rd!@!
+              username: test.d3tago.%s
+            response:
+              json: '{"status":"OK","response":{"message":"Operation succeeded","result":{"email":"test.d3tago.9cb022e4-b83b-41f2-81da-c433130dc666@gmail.com"}},"serverInfo":{"serverTime":"2020-11-16T07:03:20.46658+07:00"}}'

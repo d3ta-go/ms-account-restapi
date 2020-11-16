@@ -10,19 +10,33 @@ import (
 	"github.com/d3ta-go/system/system/identity"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
 )
 
-func NewConfig(h *handler.Handler) (*config.Config, error) {
+// NewConfig new config - helper test
+func NewConfig(h *handler.Handler) (*config.Config, *viper.Viper, error) {
 	configPath := "../../../../../../conf"
 
 	//init config
-	cfg, viper, err := config.NewConfig(configPath)
+	c, v, err := config.NewConfig(configPath)
 	if err != nil {
 		panic(err)
 	}
-	cfg.IAM.Casbin.ModelPath = "../../../../../../conf/casbin/casbin_rbac_rest_model.conf"
+	if !c.CanRunTest() {
+		panic(fmt.Sprintf("Cannot Run Test on env `%s`, allowed: %v", c.Environment.Stage, c.Environment.RunTestEnvironment))
+	}
+	c.IAM.Casbin.ModelPath = "../../../../../../conf/casbin/casbin_rbac_rest_model.conf"
 
-	h.SetDefaultConfig(cfg)
+	h.SetDefaultConfig(c)
+	h.SetViper("config", v)
+
+	// viper for test-data
+	viperTest := viper.New()
+	viperTest.SetConfigType("yaml")
+	viperTest.SetConfigName("test-data")
+	viperTest.AddConfigPath("../../../../../../conf/data")
+	viperTest.ReadInConfig()
+	h.SetViper("test-data", viperTest)
 
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		c := new(config.Config)
@@ -32,22 +46,21 @@ func NewConfig(h *handler.Handler) (*config.Config, error) {
 		h.SetDefaultConfig(c)
 	})
 
-	return cfg, nil
+	return c, v, nil
 }
 
+// NewHandler new handler - helper test
 func NewHandler() *handler.Handler {
-
 	h, _ := handler.NewHandler()
-
 	// init configuration
-	_, err := NewConfig(h)
+	_, _, err := NewConfig(h)
 	if err != nil {
 		panic(err)
 	}
-
 	return h
 }
 
+// GenerateUserTestToken generate user test token - helper test
 func GenerateUserTestToken(h *handler.Handler, t *testing.T) (string, *identity.JWTCustomClaims, error) {
 	j, err := identity.NewJWT(h)
 	if err != nil {

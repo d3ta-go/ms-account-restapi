@@ -1,6 +1,7 @@
 package account
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -8,19 +9,29 @@ import (
 
 	ht "github.com/d3ta-go/ms-account-restapi/interface/http-apps/restapi/echo/features/helper_test"
 	"github.com/d3ta-go/system/system/initialize"
+	"github.com/d3ta-go/system/system/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAuths_RegisterUser(t *testing.T) {
+	h := ht.NewHandler()
+
+	viper, err := h.GetViper("test-data")
+	if err != nil {
+		t.Errorf("GetViper: %s", err.Error())
+	}
+	testData := viper.GetStringMapString("test-data.account.auth.interface-layer.features.register-user.request")
+
+	unique := utils.GenerateUUID()
 	// variables
 	reqDTO := `{
-		"username" : "admin.d3tago", 
-		"password" : "P4s$W0rd!@!",
-		"email" : "admin.d3tago@email.tld",
-		"nickName" : "Hari",
-		"captcha": "just-capthcha-value",
-		"captchaID": "just-chaptcha-id"
+		"username" : "` + fmt.Sprintf(testData["username"], unique) + `", 
+		"password" : "` + testData["password"] + `",
+		"email" : "` + fmt.Sprintf(testData["email"], unique) + `",
+		"nickName" : "` + testData["nick-name"] + `",
+		"captcha": "` + testData["captcha-value"] + `",
+		"captchaID": "` + testData["captcha-id"] + `"
 	}`
 
 	// Setup
@@ -32,12 +43,11 @@ func TestAuths_RegisterUser(t *testing.T) {
 
 	c := e.NewContext(req, res)
 
-	handler := ht.NewHandler()
-	if err := initialize.LoadAllDatabaseConnection(handler); err != nil {
+	if err := initialize.LoadAllDatabaseConnection(h); err != nil {
 		panic(err)
 	}
 
-	auths, err := NewFAuths(handler)
+	auths, err := NewFAuths(h)
 	if err != nil {
 		panic(err)
 	}
@@ -46,11 +56,31 @@ func TestAuths_RegisterUser(t *testing.T) {
 	if assert.NoError(t, auths.RegisterUser(c)) {
 		// assert.Equal(t, http.StatusOK, res.Code)
 		// assert.Equal(t, resDTO, res.Body.String())
+		// save to test-data
+		// save result for next test
+		viper.ReadInConfig()
+		viper.Set("test-data.account.auth.interface-layer.features.login.request.username", fmt.Sprintf(testData["username"], unique))
+		viper.Set("test-data.account.auth.interface-layer.features.login.request.password", testData["password"])
+		viper.Set("test-data.account.auth.interface-layer.features.login.request.captcha-value", testData["captcha-value"])
+		viper.Set("test-data.account.auth.interface-layer.features.login.request.captcha-id", testData["captcha-id"])
+
+		viper.Set("test-data.account.auth.interface-layer.features.register-user.response.json", res.Body.String())
+		if err := viper.WriteConfig(); err != nil {
+			t.Errorf("Error: viper.WriteConfig(), %s", err.Error())
+		}
 		t.Logf("RESPONSE.auths.RegisterUser: %s", res.Body.String())
 	}
 }
 
 func TestAuths_ActivateRegistration(t *testing.T) {
+	h := ht.NewHandler()
+
+	viper, err := h.GetViper("test-data")
+	if err != nil {
+		t.Errorf("GetViper: %s", err.Error())
+	}
+	testData := viper.GetStringMapString("test-data.account.auth.interface-layer.features.activate-registration.request")
+
 	// variables
 	// via url path
 
@@ -63,14 +93,13 @@ func TestAuths_ActivateRegistration(t *testing.T) {
 
 	c := e.NewContext(req, res)
 	c.SetParamNames("activationCode")
-	c.SetParamValues("a70112cc-bca6-45c2-9bb6-cf3a56daf566")
+	c.SetParamValues(testData["activation-code"])
 
-	handler := ht.NewHandler()
-	if err := initialize.LoadAllDatabaseConnection(handler); err != nil {
+	if err := initialize.LoadAllDatabaseConnection(h); err != nil {
 		panic(err)
 	}
 
-	auths, err := NewFAuths(handler)
+	auths, err := NewFAuths(h)
 	if err != nil {
 		panic(err)
 	}
@@ -79,18 +108,32 @@ func TestAuths_ActivateRegistration(t *testing.T) {
 	if assert.NoError(t, auths.ActivateRegistration(c)) {
 		// assert.Equal(t, http.StatusOK, res.Code)
 		// assert.Equal(t, resDTO, res.Body.String())
+		// save to test-data
+		// save result for next test
+		viper.Set("test-data.account.auth.interface-layer.features.activate-registration.response.json", res.Body.String())
+		if err := viper.WriteConfig(); err != nil {
+			t.Errorf("Error: viper.WriteConfig(), %s", err.Error())
+		}
 		t.Logf("RESPONSE.auths.ActivateRegistration: %s", res.Body.String())
 	}
 }
 
 func TestAuths_Login(t *testing.T) {
+	h := ht.NewHandler()
+
+	viper, err := h.GetViper("test-data")
+	if err != nil {
+		t.Errorf("GetViper: %s", err.Error())
+	}
+	testData := viper.GetStringMapString("test-data.account.auth.interface-layer.features.login.request")
+
 	// variables
 
 	reqDTO := `{
-		"username" : "admin.d3tago", 
-		"password" : "P4s$W0rd!@!",
-		"captcha": "just-capthcha-value",
-		"captchaID": "just-chaptcha-id"
+		"username" : "` + testData["username"] + `", 
+		"password" : "` + testData["password"] + `",
+		"captcha": "` + testData["captcha-value"] + `",
+		"captchaID": "` + testData["captcha-id"] + `"
 	}`
 
 	// Setup
@@ -102,15 +145,14 @@ func TestAuths_Login(t *testing.T) {
 
 	c := e.NewContext(req, res)
 
-	handler := ht.NewHandler()
-	if err := initialize.LoadAllDatabaseConnection(handler); err != nil {
+	if err := initialize.LoadAllDatabaseConnection(h); err != nil {
 		panic(err)
 	}
-	if err := initialize.OpenAllCacheConnection(handler); err != nil {
+	if err := initialize.OpenAllCacheConnection(h); err != nil {
 		panic(err)
 	}
 
-	auths, err := NewFAuths(handler)
+	auths, err := NewFAuths(h)
 	if err != nil {
 		panic(err)
 	}
@@ -119,16 +161,30 @@ func TestAuths_Login(t *testing.T) {
 	if assert.NoError(t, auths.Login(c)) {
 		// assert.Equal(t, http.StatusOK, res.Code)
 		// assert.Equal(t, resDTO, res.Body.String())
+		// save to test-data
+		// save result for next test
+		viper.Set("test-data.account.auth.interface-layer.features.login.response.json", res.Body.String())
+		if err := viper.WriteConfig(); err != nil {
+			t.Errorf("Error: viper.WriteConfig(), %s", err.Error())
+		}
 		t.Logf("RESPONSE.auths.Login: %s", res.Body.String())
 	}
 }
 
 func TestAuths_LoginApp(t *testing.T) {
+	h := ht.NewHandler()
+
+	viper, err := h.GetViper("test-data")
+	if err != nil {
+		t.Errorf("GetViper: %s", err.Error())
+	}
+	testData := viper.GetStringMapString("test-data.account.auth.interface-layer.features.login-app.request")
+
 	// variables
 
 	reqDTO := `{
-		"clientKey" : "53102ba5-b6b2-47ad-a68d-682463a8be29", 
-		"secretKey" : "OTk5ZDlmYjJlZGUyMjAxNTZkZThiNmNkMmJmNDI1NjdiNTYzMzcxNDEwNzNiNDBjM2NhZmIxOWY3NzZmYzhmNg=="
+		"clientKey" : "` + testData["client-key"] + `", 
+		"secretKey" : "` + testData["secret-key"] + `"
 	}`
 
 	// Setup
@@ -157,6 +213,12 @@ func TestAuths_LoginApp(t *testing.T) {
 	if assert.NoError(t, auths.LoginApp(c)) {
 		// assert.Equal(t, http.StatusOK, res.Code)
 		// assert.Equal(t, resDTO, res.Body.String())
+		// save to test-data
+		// save result for next test
+		viper.Set("test-data.account.auth.interface-layer.features.login-app.response.json", res.Body.String())
+		if err := viper.WriteConfig(); err != nil {
+			t.Errorf("Error: viper.WriteConfig(), %s", err.Error())
+		}
 		t.Logf("RESPONSE.auths.LoginApp: %s", res.Body.String())
 	}
 }

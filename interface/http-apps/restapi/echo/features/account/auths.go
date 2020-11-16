@@ -8,6 +8,7 @@ import (
 
 	"github.com/d3ta-go/ddd-mod-account/modules/account/application"
 	appDTOAuth "github.com/d3ta-go/ddd-mod-account/modules/account/application/dto/auth"
+	ht "github.com/d3ta-go/ms-account-restapi/interface/http-apps/restapi/echo/features/helper_test"
 	"github.com/d3ta-go/system/interface/http-apps/restapi/echo/features"
 	captcha "github.com/d3ta-go/system/interface/http-apps/restapi/echo/features/system/captcha"
 	"github.com/d3ta-go/system/interface/http-apps/restapi/echo/response"
@@ -62,6 +63,20 @@ func (f *FAuths) RegisterUser(c echo.Context) error {
 	resp, err := f.accountApp.AuthenticationSvc.Register(req, i)
 	if err != nil {
 		return f.TranslateErrorMessage(err, c)
+	}
+
+	if f.InTestMode() {
+		h := ht.NewHandler()
+		viper, err := h.GetViper("test-data")
+		if err != nil {
+			return f.TranslateErrorMessage(err, c)
+		}
+		// save to test-data
+		// save result for next test
+		viper.Set("test-data.account.auth.interface-layer.features.activate-registration.request.activation-code", resp.ActivationCode)
+		if err := viper.WriteConfig(); err != nil {
+			return f.TranslateErrorMessage(err, c)
+		}
 	}
 
 	return response.CreatedWithData(resp, c)
