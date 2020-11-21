@@ -94,3 +94,33 @@ $ cd dist/[OS-arch]/
 $ ./ms-account-restapi db migrate
 $ ./ms-account-restapi server restapi
 ```
+
+**RESTAPI (console):**
+
+![Microservice: Account REST API](docs/img/account-sample-ms-rest-api.png)
+
+**Swagger UI (openapis docs):**
+
+URL: http://localhost:20202/openapis/docs/index.html
+
+![Openapis: Acount REST AIP](docs/img/account-sample-openapis-docs.png)
+
+**Related Domain/Repositories:**
+
+1. DDD Module: Account (Generic Subdomain) - [d3ta-go/ddd-mod-account](https://github.com/d3ta-go/ddd-mod-account)
+2. DDD Module (Indirect): Email (Generic Subdomain) - [d3ta-go/ddd-mod-email](https://github.com/d3ta-go/ddd-mod-email)
+3. Common System Libraries - [d3ta-go/system](https://github.com/d3ta-go/system)
+
+**Online Demo:\***
+
+> Work in progress!
+
+**References:**
+
+1. [Book] Domain-Driven Design: Tackling Complexity in the Heart of Software 1st Edition (Eric Evans, 2004)
+
+2. [Book] Patterns, Principles, and Practices of Domain-Driven Design (Scott Millett & Nick Tune, 2015)
+
+**Team & Maintainer:**
+
+1. Muhammad Hari (https://www.linkedin.com/in/muharihar/)
