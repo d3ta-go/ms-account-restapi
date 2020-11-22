@@ -88,7 +88,7 @@ func StartRestAPIServer() error {
 	// Set routers
 	SetRouters(e, superHandler)
 
-	// Start server with Gracefull shutdown
+	// Start server with Graceful shutdown
 	httpPort := fmt.Sprintf(":%s", cfg.Applications.Servers.RestAPI.Options.Listener.Port)
 	go func() {
 		if err := e.Start(httpPort); err != nil {

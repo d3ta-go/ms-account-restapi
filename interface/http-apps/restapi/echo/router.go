@@ -25,6 +25,9 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 // SetRouters is a function to ser Echo Routers
 func SetRouters(e *echo.Echo, h *handler.Handler) {
 	cfg, err := h.GetDefaultConfig()
+	if err != nil {
+		panic(err)
+	}
 
 	// set default middleware
 	e.Pre(middleware.RemoveTrailingSlash())
