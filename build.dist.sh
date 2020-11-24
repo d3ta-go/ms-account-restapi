@@ -2,7 +2,10 @@
 # bash
 BIN_FILE=ms-account-restapi
 
-platforms=("darwin/amd64" "linux/amd64" "linux/386" "windows/amd64" "windows/386")
+read -p 'platform: ' platform
+
+# platforms=("darwin/amd64" "linux/amd64" "linux/386" "windows/amd64" "windows/386")
+platforms=($platform)
 
 for platform in "${platforms[@]}"
 do
