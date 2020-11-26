@@ -1,6 +1,5 @@
 # ms-account-restapi ( [![Go Report Card](https://goreportcard.com/badge/github.com/d3ta-go/ms-account-restapi)](https://goreportcard.com/report/github.com/d3ta-go/ms-account-restapi) )
 
-
 MicroService Interface/Presentation App: Account RestAPI
 
 As a part of `Simple Implementation of Modular DDD Technical Architecture Patterns in Go`.
@@ -80,17 +79,18 @@ $ ./ms-account-restapi server restapi
 
 5. Distribution (binary)
 
-Binary distribution (OS-arch):
+Binary distribution (OS/arch):
 
-- darwin-amd64
-- linux-amd64
-- linux-386
-- windows-amd64
-- windows-386
+- darwin/amd64
+- linux/amd64
+- linux/386
+- windows/amd64
+- windows/386
 
 ```shell
 $ cd ms-account-restapi
 $ sh build.dist.sh
+$ platform: [choose from OS/arch list, for example: darwin/amd64]
 $ cd dist/[OS-arch]/
 $ ./ms-account-restapi db migrate
 $ ./ms-account-restapi server restapi
